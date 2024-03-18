@@ -1,0 +1,11 @@
+library(randomForest)
+data(iris)
+set.seed(123)
+train_indices <- sample(1:nrow(iris), 0.7 * nrow(iris))
+train_data <- iris[train_indices, ]
+rf_model <- randomForest(Species ~ ., data = train_data, ntree = 500)
+predictions <- predict(rf_model, iris[-train_indices, ])
+confusion_matrix <- table(predictions, iris$Species[-train_indices])
+accuracy <- sum(diag(confusion_matrix)) / sum(confusion_matrix)
+print(paste("Accuracy:", accuracy))
+varImpPlot(rf_model)
